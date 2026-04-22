@@ -110,7 +110,7 @@ npm test
 - I used React Flow because the case study is clearly about graph-based workflow design, and it gives solid canvas behavior without spending time reinventing that part.
 - I kept workflow state in a reducer so node edits, canvas actions, undo/redo, and simulation all read from the same source of truth.
 - I separated canvas logic, validation logic, mock API logic, and form logic so the code stays understandable even as the feature set grows.
-- I kept the folder structure modular, but not too “enterprise.” For a short case study, I wanted the codebase to stay easy to read.
+- I kept the folder structure modular, but not too "enterprise." For a short case study, I wanted the codebase to stay easy to read.
 - I treated simulation as a serialized workflow request so it feels close to a real API interaction even though this is still a frontend-only prototype.
 - I added node-level validation so problems are visible directly on the canvas, not only in the right panel.
 - For the MVP, I kept `Approval` as a simple workflow step instead of introducing explicit approved/rejected routing logic.
@@ -124,15 +124,7 @@ npm test
 - Some graph behaviors are intentionally simple because the assignment is time-boxed and the priority is working functionality with clean structure.
 - `Task.dueDate` is optional in state and stays empty when not set. If a stricter backend is introduced later, I would normalize it at the API boundary instead of spreading that logic across the form layer.
 
-## What I'd Add With More Time
-
-- Full browser E2E coverage for drag/drop, import/export, and undo/redo flows
-- Better layout heuristics for larger branched workflows
-- Visual edge-level validation cues
-- Optional local persistence
-- Sharable workflow snapshots or exports beyond JSON
-
-## What I Completed vs. What I'd Add Next
+## What I Completed vs. What I'd Add With More Time
 
 Completed in this prototype:
 
@@ -144,7 +136,10 @@ Completed in this prototype:
 
 If I had more time, I would focus next on:
 
+- full browser E2E coverage for drag/drop, import/export, and undo/redo flows
 - smoother handling for more complex branched workflows
-- stronger end-to-end browser testing
+- better layout heuristics for larger branched workflows
+- visual edge-level validation cues
 - optional persistence or save/load beyond manual JSON import/export
+- sharable workflow snapshots or exports beyond JSON
 - more advanced workflow semantics for approvals and conditional routing
