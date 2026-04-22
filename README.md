@@ -4,6 +4,8 @@
 
 This is a small React + TypeScript + Vite prototype for designing and testing HR workflows like onboarding, leave approval, and document verification. The goal was to build something clean, modular, and working within the case-study time box rather than over-engineer it.
 
+Live demo: [https://gursimarsingh-hr-workflow-designer.netlify.app](https://gursimarsingh-hr-workflow-designer.netlify.app)
+
 ## Tech Stack
 
 - React 19
