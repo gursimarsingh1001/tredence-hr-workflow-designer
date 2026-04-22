@@ -17,6 +17,7 @@ interface NodeConfigPanelProps {
   automationsError: string | null;
   automationsLoading: boolean;
   nodeHistory: NodeVersionEntry[];
+  onDeleteNode: () => void;
   onUpdateNode: (id: string, node: WorkflowNode['data']) => void;
   selectedNode: WorkflowNode;
   validationErrors: string[];
@@ -30,16 +31,24 @@ interface KeyValueEditorProps {
   value?: Record<string, string>;
 }
 
+const NODE_TYPE_LABELS: Record<NodeType, string> = {
+  [NodeType.START]: 'Start Node',
+  [NodeType.TASK]: 'Task Node',
+  [NodeType.APPROVAL]: 'Approval Node',
+  [NodeType.AUTOMATED_STEP]: 'Automated Step',
+  [NodeType.END]: 'End Node',
+};
+
 function formatHistoryPreview(nodeData: WorkflowNode['data']) {
   switch (nodeData.nodeType) {
     case NodeType.START:
       return nodeData.config.title || 'Untitled start';
     case NodeType.TASK:
-      return `${nodeData.config.title || 'Untitled task'} • ${nodeData.config.assignee || 'No assignee'}`;
+      return `${nodeData.config.title || 'Untitled task'} - ${nodeData.config.assignee || 'No assignee'}`;
     case NodeType.APPROVAL:
-      return `${nodeData.config.title || 'Untitled approval'} • ${nodeData.config.approverRole}`;
+      return `${nodeData.config.title || 'Untitled approval'} - ${nodeData.config.approverRole}`;
     case NodeType.AUTOMATED_STEP:
-      return `${nodeData.config.title || 'Untitled automated step'} • ${nodeData.config.actionId || 'No action'}`;
+      return `${nodeData.config.title || 'Untitled automated step'} - ${nodeData.config.actionId || 'No action'}`;
     case NodeType.END:
       return nodeData.config.endMessage || 'No end message';
     default:
@@ -54,6 +63,23 @@ function formatHistoryTimestamp(timestamp: string) {
     hour: 'numeric',
     minute: '2-digit',
   });
+}
+
+function getSelectedNodeDisplayTitle(node: WorkflowNode) {
+  switch (node.data.nodeType) {
+    case NodeType.START:
+      return node.data.config.title || 'Workflow Start';
+    case NodeType.TASK:
+      return node.data.config.title || 'New Task';
+    case NodeType.APPROVAL:
+      return node.data.config.title || 'Approval';
+    case NodeType.AUTOMATED_STEP:
+      return node.data.config.title || 'Automated Step';
+    case NodeType.END:
+      return node.data.config.endMessage || 'Workflow Complete';
+    default:
+      return 'Selected Node';
+  }
 }
 
 function areStringRecordsEqual(
@@ -243,11 +269,14 @@ export function NodeConfigPanel({
   automationsError,
   automationsLoading,
   nodeHistory,
+  onDeleteNode,
   onUpdateNode,
   selectedNode,
   validationErrors,
 }: NodeConfigPanelProps) {
   const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
+  const panelLabel = NODE_TYPE_LABELS[selectedNode.data.nodeType];
+  const selectedNodeDisplayTitle = getSelectedNodeDisplayTitle(selectedNode);
 
   useEffect(() => {
     setIsHistoryExpanded(false);
@@ -613,8 +642,16 @@ export function NodeConfigPanel({
   return (
     <div className="panel-card">
       <div className="panel-card__header">
-        <p className="eyebrow">Configuration</p>
-        <h2>{title}</h2>
+        <p className="eyebrow">Inspector</p>
+        <h2>Node Configuration</h2>
+        <div className="panel-card__meta">
+          <span className="panel-card__meta-pill">{panelLabel}</span>
+          <span className="panel-card__meta-text">ID {selectedNode.id.slice(0, 8)}</span>
+        </div>
+        <div className="panel-card__selected-node">
+          <strong>{selectedNodeDisplayTitle}</strong>
+          <span>{title}</span>
+        </div>
       </div>
 
       {validationErrors.length > 0 ? (
@@ -663,7 +700,7 @@ export function NodeConfigPanel({
                   <div className="version-history__item-top">
                     <div className="version-history__item-heading">
                       <strong>{entry.label}</strong>
-                      <small>{formatHistoryPreview(entry.data).replace('â€¢', '-')}</small>
+                      <small>{formatHistoryPreview(entry.data)}</small>
                       <p className="version-history__change">
                         {summarizeHistoryChanges(entry.data, historyEntries[index + 1]?.data)}
                       </p>
@@ -695,6 +732,10 @@ export function NodeConfigPanel({
           </div>
         )}
       </div>
+
+      <button type="button" className="button button--ghost button--danger panel-card__delete" onClick={onDeleteNode}>
+        Delete Node
+      </button>
     </div>
   );
 }

@@ -63,14 +63,14 @@ const AUTO_INSERT_ORDER: Record<NodeType, number> = {
 
 const defaultEdgeStyle = {
   type: 'smoothstep' as const,
-  animated: true,
+  animated: false,
   style: {
-    stroke: '#2563eb',
+    stroke: '#b7c4d8',
     strokeWidth: 2,
   },
   markerEnd: {
     type: MarkerType.ArrowClosed,
-    color: '#2563eb',
+    color: '#b7c4d8',
   },
 };
 
@@ -811,7 +811,7 @@ export function WorkflowCanvas({
       >
         <MiniMap pannable zoomable />
         <Controls />
-        <Background gap={20} size={1.2} />
+        <Background gap={24} size={1.2} color="#d7dfeb" />
       </ReactFlow>
     </div>
   );

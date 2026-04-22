@@ -50,7 +50,7 @@ export function BaseNode({
     >
       {/* Default unnamed handles keep the MVP edge model simple.
           We only need explicit handle ids if we later introduce multiple named ports per node. */}
-      {targetHandle ? <Handle type="target" position={Position.Top} /> : null}
+      {targetHandle ? <Handle type="target" position={Position.Left} /> : null}
       <div className="workflow-node__header workflow-node__drag-handle">
         <div className="workflow-node__heading">
           <div className="workflow-node__label">{label}</div>
@@ -85,7 +85,7 @@ export function BaseNode({
           ))}
         </div>
       ) : null}
-      {sourceHandle ? <Handle type="source" position={Position.Bottom} /> : null}
+      {sourceHandle ? <Handle type="source" position={Position.Right} /> : null}
     </div>
   );
 }

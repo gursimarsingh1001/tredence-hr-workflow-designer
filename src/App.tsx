@@ -728,36 +728,39 @@ export default function App() {
   return (
     <>
       <div className="app-shell">
-        <Sidebar onApplyTemplate={handleApplyTemplate} />
-
-        <section className="workspace">
-          <div className="workspace__header">
-            <div>
-              <p className="eyebrow">Builder</p>
-              <h2>Design workflows visually</h2>
-              <p className="workspace__copy">
-                Drag steps onto the canvas, connect them, edit the forms, and validate before you run.
-              </p>
+        <header className="app-topbar">
+          <div className="app-topbar__brand">
+            <div className="app-topbar__title-block">
+              <span className="app-topbar__eyebrow">HR Admin Tool</span>
+              <div className="app-topbar__title-row">
+                <h1>HR Workflow Designer</h1>
+                <span className="app-topbar__subtitle">Visual Builder</span>
+              </div>
             </div>
-            <Toolbar
-              canRedo={canRedo}
-              canUndo={canUndo}
-              hasSelection={selectedNode !== null}
-              hasWorkflow={state.nodes.length > 0}
-              isRunning={isRunningSimulation}
-              showValidationSummary={showValidationSummary}
-              validationErrorCount={liveValidation.errors.length}
-              onAutoArrange={handleAutoArrange}
-              onClear={handleClearWorkflow}
-              onExportJson={handleExportJson}
-              onImportJson={handleOpenImportModal}
-              onRedo={actions.redo}
-              onReviewIssues={handleReviewIssues}
-              onRunSimulation={handleRunSimulation}
-              onUndo={actions.undo}
-            />
           </div>
 
+          <Toolbar
+            canRedo={canRedo}
+            canUndo={canUndo}
+            hasSelection={selectedNode !== null}
+            hasWorkflow={state.nodes.length > 0}
+            isRunning={isRunningSimulation}
+            showValidationSummary={showValidationSummary}
+            validationErrorCount={liveValidation.errors.length}
+            onAutoArrange={handleAutoArrange}
+            onClear={handleClearWorkflow}
+            onExportJson={handleExportJson}
+            onImportJson={handleOpenImportModal}
+            onRedo={actions.redo}
+            onReviewIssues={handleReviewIssues}
+            onRunSimulation={handleRunSimulation}
+            onUndo={actions.undo}
+          />
+        </header>
+
+        <Sidebar onApplyTemplate={handleApplyTemplate} onStartFromScratch={handleStartFromScratch} />
+
+        <section className="workspace">
           <WorkflowCanvas
             actions={actions}
             edges={state.edges}
@@ -777,6 +780,7 @@ export default function App() {
               selectedNode={selectedNode}
               nodeHistory={selectedNodeHistory}
               onUpdateNode={actions.updateNode}
+              onDeleteNode={() => handleClearWorkflow()}
               automations={automations}
               automationsError={automationsError}
               automationsLoading={automationsLoading}

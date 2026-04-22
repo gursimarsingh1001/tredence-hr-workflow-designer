@@ -34,20 +34,61 @@ export function Toolbar({
   onUndo,
 }: ToolbarProps) {
   const validationLabel = !showValidationSummary
-    ? 'No workflow yet'
+    ? '0 Errors'
     : validationErrorCount > 0
-      ? `${validationErrorCount} issue${validationErrorCount === 1 ? '' : 's'}`
-      : 'Ready';
-  const clearLabel = hasSelection ? 'Delete Selected' : 'Clear Workflow';
+      ? `${validationErrorCount} Error${validationErrorCount === 1 ? '' : 's'}`
+      : '0 Errors';
+  const clearLabel = hasSelection ? 'Delete Selected' : 'Clear';
 
   return (
     <div className="toolbar">
-      <div className="toolbar__group">
+      <div className="toolbar__group toolbar__group--icons">
+        <button
+          type="button"
+          className="toolbar-icon-button"
+          onClick={onUndo}
+          disabled={!canUndo}
+          aria-label="Undo"
+          title="Undo"
+        >
+          ↶
+        </button>
+        <button
+          type="button"
+          className="toolbar-icon-button"
+          onClick={onRedo}
+          disabled={!canRedo}
+          aria-label="Redo"
+          title="Redo"
+        >
+          ↷
+        </button>
+        <button
+          type="button"
+          className="toolbar-icon-button"
+          onClick={onAutoArrange}
+          aria-label="Auto arrange"
+          title="Auto Arrange"
+        >
+          ⤧
+        </button>
+      </div>
+
+      <div className="toolbar__group toolbar__group--files">
+        <button type="button" className="button button--ghost toolbar-button--compact" onClick={onImportJson}>
+          Import
+        </button>
+        <button type="button" className="button button--ghost toolbar-button--compact" onClick={onExportJson}>
+          Export
+        </button>
+      </div>
+
+      <div className="toolbar__group toolbar__group--status">
         <button
           type="button"
           className={`validation-pill validation-pill--button${showValidationSummary && validationErrorCount > 0 ? ' validation-pill--error' : ''}${!showValidationSummary ? ' validation-pill--idle' : ''}`}
           onClick={onReviewIssues}
-          disabled={validationErrorCount === 0 || !showValidationSummary}
+          disabled={!showValidationSummary}
           title={validationErrorCount > 0 ? 'Click to jump to first issue' : undefined}
         >
           {validationLabel}
@@ -55,33 +96,9 @@ export function Toolbar({
       </div>
 
       <div className="toolbar__group">
-        <button type="button" className="button button--ghost" onClick={onUndo} disabled={!canUndo}>
-          Undo
-        </button>
-        <button type="button" className="button button--ghost" onClick={onRedo} disabled={!canRedo}>
-          Redo
-        </button>
-      </div>
-
-      <div className="toolbar__group">
-        <button type="button" className="button button--ghost" onClick={onAutoArrange}>
-          Auto Arrange
-        </button>
-      </div>
-
-      <div className="toolbar__group">
-        <button type="button" className="button button--ghost" onClick={onImportJson}>
-          Import JSON
-        </button>
-        <button type="button" className="button button--ghost" onClick={onExportJson}>
-          Export JSON
-        </button>
-      </div>
-
-      <div className="toolbar__group">
         <button
           type="button"
-          className="button button--ghost button--danger"
+          className="button button--ghost button--danger toolbar-button--compact"
           onClick={onClear}
           disabled={!hasWorkflow}
           title={
@@ -96,13 +113,13 @@ export function Toolbar({
         </button>
         <button
           type="button"
-          className="button"
+          className="button toolbar-button--primary"
           onClick={onRunSimulation}
           disabled={isRunning || !hasWorkflow}
           title={!hasWorkflow ? 'Add at least one node to simulate' : undefined}
           aria-label={!hasWorkflow ? 'Add at least one node to simulate' : 'Run Simulation'}
         >
-          {isRunning ? 'Running...' : 'Run Simulation'}
+          {isRunning ? 'Running...' : 'Simulate'}
         </button>
       </div>
     </div>
