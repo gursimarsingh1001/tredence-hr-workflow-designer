@@ -663,7 +663,7 @@ export function NodeConfigPanel({
                   <div className="version-history__item-top">
                     <div className="version-history__item-heading">
                       <strong>{entry.label}</strong>
-                      <small>{formatHistoryPreview(entry.data)}</small>
+                      <small>{formatHistoryPreview(entry.data).replace('â€¢', '-')}</small>
                       <p className="version-history__change">
                         {summarizeHistoryChanges(entry.data, historyEntries[index + 1]?.data)}
                       </p>
